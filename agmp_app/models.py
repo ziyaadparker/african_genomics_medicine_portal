@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from decimal import Decimal
 
 # Create your models here.    
 class drug_state(models.Model):
@@ -31,15 +32,25 @@ class pharmacogenes(models.Model):
     protein=models.CharField(max_length=50)
     function=models.TextField()
 
+class country_ethnicity(models.Model):
+    id=models.AutoField(primary_key=True)
+    country_ethnicity=models.CharField(max_length=150)
+
 class snp(models.Model):
     snp_id=models.AutoField(primary_key=True)
     rs_id=models.CharField(max_length=50)
     drug_id=models.ForeignKey(drug, on_delete=models.CASCADE, default=1)
     allele=models.CharField(max_length=50)
     gene_id=models.ForeignKey(pharmacogenes, on_delete=models.CASCADE,default=2)
-    description=models.TextField()
+    disease_phenotype=models.TextField()
     reference_id=models.ForeignKey(study, on_delete=models.CASCADE,default=3)
-    #ethnicity_country_id=models.ForeignKey(ethnicity_country, on_delete=models.CASCADE)
+    chromosome=models.CharField(max_length=50)
+    p_value=models.DecimalField(max_digits=10,decimal_places=4,default=Decimal('0.0000'))
+
+class snp_country_ethnicity(models.Model):
+    id=models.AutoField(primary_key=True)
+    snp_id=models.ForeignKey(snp, on_delete=models.CASCADE)
+    country_ethnicity_id=models.ForeignKey(country_ethnicity, on_delete=models.CASCADE)
 
 class star_allele(models.Model):
     id=models.AutoField(primary_key=True)
@@ -49,4 +60,11 @@ class star_allele(models.Model):
     disease_phenotype=models.CharField(max_length=50)
     reference_id=models.ForeignKey(study, on_delete=models.CASCADE)
     chromosome=models.CharField(max_length=50)
-    disease_id=models.IntegerField()
+    p_value=models.DecimalField(max_digits=10,decimal_places=4,default=Decimal('0.0000'))
+  
+class star_allele_ethnicity_country(models.Model):
+    id=models.AutoField(primary_key=True)
+    star_allele_id=models.ForeignKey(star_allele, on_delete=models.CASCADE)
+    country_ethnicity_id=models.ForeignKey(country_ethnicity, on_delete=models.CASCADE)
+
+
