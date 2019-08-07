@@ -10,10 +10,10 @@ class drug_state(models.Model):
 class drug(models.Model):
     drug_id=models.AutoField(primary_key=True)
     drug_name=models.CharField(max_length=250)
-    posology=models.CharField(max_length=250)
-    chemical_structure=models.TextField()
-    state_id=models.ForeignKey(drug_state, on_delete=models.CASCADE)
-    drug_bank_id=models.IntegerField() #may have to link to another table
+    posology=models.CharField(max_length=250, default="NA")
+    chemical_structure=models.TextField(default="NA")
+    state=models.ForeignKey(drug_state, on_delete=models.CASCADE)
+    drug_bank_id=models.IntegerField(default=0) #may have to link to another table
 
 class externalid_type(models.Model):
     type_id=models.AutoField(primary_key=True)
@@ -29,21 +29,23 @@ class study(models.Model):
 class pharmacogenes(models.Model):
     id=models.AutoField(primary_key=True)
     gene_name=models.CharField(max_length=50)
-    protein=models.CharField(max_length=50)
-    function=models.TextField()
+    protein=models.CharField(max_length=50, default="NA")
+    function=models.TextField(default="NA")
 
 class country_ethnicity(models.Model):
     id=models.AutoField(primary_key=True)
     country_ethnicity=models.CharField(max_length=150)
 
+#we may have to change disease_phenotype to just phenotype
+#since some of the phenotypes we look at there are not necessarily diseases
 class snp(models.Model):
     snp_id=models.AutoField(primary_key=True)
     rs_id=models.CharField(max_length=50)
-    drug_id=models.ForeignKey(drug, on_delete=models.CASCADE, default=1)
+    drug=models.ForeignKey(drug, on_delete=models.CASCADE, default=1)
     allele=models.CharField(max_length=50)
-    gene_id=models.ForeignKey(pharmacogenes, on_delete=models.CASCADE,default=2)
+    gene=models.ForeignKey(pharmacogenes, on_delete=models.CASCADE,default=2)
     disease_phenotype=models.TextField()
-    reference_id=models.ForeignKey(study, on_delete=models.CASCADE,default=3)
+    reference=models.ForeignKey(study, on_delete=models.CASCADE,default=3)
     chromosome=models.CharField(max_length=50)
     p_value=models.DecimalField(max_digits=10,decimal_places=4,default=Decimal('0.0000'))
 
@@ -55,10 +57,10 @@ class snp_country_ethnicity(models.Model):
 class star_allele(models.Model):
     id=models.AutoField(primary_key=True)
     star_annotation=models.CharField(max_length=50)
-    drug_id=models.ForeignKey(drug, on_delete=models.CASCADE)
-    gene_id=models.ForeignKey(pharmacogenes, on_delete=models.CASCADE)
+    drug=models.ForeignKey(drug, on_delete=models.CASCADE)
+    gene=models.ForeignKey(pharmacogenes, on_delete=models.CASCADE)
     disease_phenotype=models.CharField(max_length=50)
-    reference_id=models.ForeignKey(study, on_delete=models.CASCADE)
+    reference=models.ForeignKey(study, on_delete=models.CASCADE)
     chromosome=models.CharField(max_length=50)
     p_value=models.DecimalField(max_digits=10,decimal_places=4,default=Decimal('0.0000'))
   
