@@ -25,16 +25,24 @@ SECRET_KEY = 'm@6l&*&f$cek4e-41ukuhcx2^v!j3i-99e-(lzv37ir_^xo+tj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '49591fca.ngrok.io',
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0'
+]
 
 
 # Application definition
+
+AGNOCOMPLETE_DATA_ATTRIBUTE = 'autocomplete'
 
 INSTALLED_APPS = [
     'bootstrap4',
     'crispy_forms',
     'agmp_app',
     'leaflet',
+    'agnocomplete',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
